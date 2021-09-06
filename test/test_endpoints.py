@@ -1,6 +1,7 @@
 import os
 import sys
 from fastapi.testclient import TestClient
+import json
 
 sys.path.append(
     (os.path.abspath(os.path.join(os.path.dirname(__file__), "..")) + "/app/")
@@ -21,3 +22,19 @@ def test_router_query():
     response = client.get("/routers")
     assert response.status_code == 200
     assert response.json() == ["Test endpoint"]
+
+
+def test_redis_set():
+    response = client.get("/redis/set/keys/world")
+    assert response.status_code == 200
+    assert response.json() == ["Successfully registered"]
+
+    response = client.get("/redis/get/keys/world")
+    assert response.status_code == 200
+
+    with open("test/test_data/redis_input.json") as f:
+        expect_data = json.load(f)
+
+    assert response.json() == expect_data
+
+    

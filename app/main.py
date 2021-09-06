@@ -1,22 +1,23 @@
 from fastapi import FastAPI
-from .routers import router
+from .routers import router, redis_router
 import yaml
 import logging.config
+import logging
 
 # Set logging configuration
 with open("./app/config/logging_config.yaml", "r") as stream:
     config = yaml.load(stream, Loader=yaml.FullLoader)
 logging.config.dictConfig(config)
 
-# Set logger name to project
-logger = logging.getLogger("garage")
-logger.info("START Application")
-
 # Tags for representative endpoints
 tags = [
     {
         "name": "routers",
         "description": "Operations with xxx",
+    },
+    {
+        "name": "redis",
+        "description": "Operation with redis"
     }
 ]
 
@@ -28,8 +29,14 @@ app = FastAPI(
     openapi_tags=tags,
 )
 
+# Set logger name to project
+logger = logging.getLogger("garage")
+logger.warning("START Application")
+
 # Add routers to main
 app.include_router(router.router)
+app.include_router(redis_router.router)
+logger.debug("hello!!!!!!")
 
 # This path is for health check or test
 @app.get("/")
