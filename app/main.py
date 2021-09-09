@@ -15,10 +15,7 @@ tags = [
         "name": "routers",
         "description": "Operations with xxx",
     },
-    {
-        "name": "redis",
-        "description": "Operation with redis"
-    }
+    {"name": "redis", "description": "Operation with redis"},
 ]
 
 # Define Fast api and description

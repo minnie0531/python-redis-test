@@ -14,10 +14,9 @@ Client can access this application through GET/POST/PUT/DELETE /queries
 """
 
 router = APIRouter()
-redis = Redis(host = os.getenv('REDIS_HOST'),
-        port = os.getenv('REDIS_PORT'),
-        pw = os.getenv('REDIS_PW'))
+redis = Redis()
 logger = logging.getLogger("garage")
+
 
 @router.get("/redis/set/keys/{key}", tags=["redis"], description="Test endpoint")
 def redis_set(key: str):
@@ -34,12 +33,11 @@ def redis_set(key: str):
 
 
 @router.get("/redis/get/keys/{key}", tags=["redis"], description="Test endpoint")
-def redis_get(key:str):
-    
+def redis_get(key: str):
+
     if redis.check_exists_key(key):
         logger.info("key exists")
         json_compatible_item_data = jsonable_encoder(redis.get_data(key))
         return JSONResponse(content=json_compatible_item_data)
     else:
         return {"The %s key is not existed" % key}
-

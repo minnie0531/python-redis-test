@@ -36,5 +36,3 @@ def test_redis_set():
         expect_data = json.load(f)
 
     assert response.json() == expect_data
-
-    
